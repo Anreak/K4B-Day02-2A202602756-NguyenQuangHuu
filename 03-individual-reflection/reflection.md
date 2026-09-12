@@ -40,13 +40,13 @@ Tôi điều phối việc chấm điểm và giúp nhóm giữ bài toán ở p
 
 | Phase | Tôi dùng AI để làm gì? | AI hữu ích ở đâu? | AI sai / hời hợt ở đâu? | Tôi sửa gì bằng nhận định của mình? |
 |---|---|---|---|---|
-| Scan | Sử dụng ai để đưa ra những ý tưởng từ base của mình|Ai đưa ra những ý tưởng khá lạ |AI đưa ra những tữ ngữ không thể đo lường được | Tôi sửa lại mức độ đo lường |
-| Problem Card |Tôi yêu cầu ai đưa ra format dựa trên thông tin raw |Ai viết khá gọn |Wording của ai không mượt hoặc không hợp|Tôi yêu cầu ai viết lại theo hướng khác |
-| Workflow |Tôi yêu cầu ai đưa ra format dựa trên thông tin raw |Ai viết thành công |Wording của ai không hợp|Tôi yêu cầu ai viết lại theo hướng khác |
-| Research |Sử dụng ai đưa thông tin |Ai đưa ra nhiều thông tin |Thông tin vẫn cần kiểm chứng|Tôi đã kiểm chứng thông tin |
-| Problem Statement | Tôi yêu cầu ai diễn giải ý của tôi | Ai đã diễn giải thành công ý chính |Ai không đưa ra văn phong phù hợp | Tôi đưa văn mẫu tôi viết để chỉnh lại văn phong |
-| Rule / Workflow / Agent |Tôi yêu cầu ai đánh giá từng phương án | Ai đưa ra những phương án với những được và hại| Lượng thông tin ai đưa ra chưa đủ để sử dụng | Tôi prompt kỹ hơn về những thứ mà tôi muốn |
-| Decision | Ai giúp củng cố lựa chọn của tôi| Ai đã xét những lợi và hại rất rõ ràng, và cho tôi gợi ý| Những lợi và hại của ai có điểm do hallucination | Tôi tự xem xét lại phần đó và đưa ra lựa chọn cuối |
+| Scan | Mở rộng góc nhìn sau khi đã tự liệt kê các vấn đề của Backend Dev | Gợi ý thêm pain point từ phía người nhận kết quả (Tester thiếu thông tin tái hiện, PM khó hiểu code) | Gợi ý các ý tưởng quá rộng và số đo mơ hồ kiểu "tốn nhiều thời gian" | Tự bổ sung các mốc thời gian định lượng cụ thể (10–30 phút/lần) dựa trên thực tế công việc |
+| Problem Card | Đóng vai PM để phản biện điểm nghẽn và tính khả thi | Chỉ ra lỗ hổng: AI không thể nắm hết ngữ cảnh nghiệp vụ nếu chỉ nhìn commit diff | AI có xu hướng khuyên dùng Agent tự động tạo ticket và assign người gây lỗi | Hạ cấp giải pháp xuống Workflow, bổ sung ranh giới con người kiểm tra để tránh xung đột nội bộ |
+| Workflow | Gợi ý phân tách các bước Before/After và cú pháp luồng | Giúp hình dung rõ các điểm chuyển giao (handoff) giữa Dev và Tester | AI tự động bỏ qua bước fallback khi AI trích xuất sai | Tự thêm nhánh xử lý dự phòng (fallback) quay về quy trình thủ công nếu AI sinh sai dữ liệu |
+| Research | Tìm kiếm các giải pháp, công cụ và tiện ích tương tự trên thị trường | Liệt kê nhanh các công cụ như Teal, Huntr, Simplify | Đưa ra các số liệu tính năng mà không dẫn link chính thức để kiểm chứng | Trực tiếp tra cứu tài liệu và điều khoản LinkedIn để xác thực tính pháp lý và giới hạn kỹ thuật |
+| Problem Statement | Kiểm tra xem các trường mục có bị lẫn lộn giữa vấn đề và giải pháp không | Phát hiện mục tiêu đo lường ban đầu bị thiếu chỉ số chất lượng đề xuất | AI diễn giải văn phong quá hoa mỹ và làm loãng ranh giới (Boundary) | Tự rút gọn, thiết lập ranh giới cứng: dứt khoát không cào dữ liệu trái phép và không tự nộp CV |
+| Rule / Workflow / Agent | Phản biện xem Rule đã giải quyết được bao nhiêu % bài toán | Chỉ ra các trường hợp Rule đơn giản có thể giải quyết tốt (chuẩn hóa URL, lọc từ khóa) | AI thiên vị việc dùng Agent tự hành để xử lý toàn bộ quy trình | Quyết định chọn Workflow kết hợp Rule và AI, giữ con người làm chốt chặn cuối cùng |
+| Decision | Liệt kê các rủi ro tiềm ẩn trước khi quyết định Go / Not Yet / No-Go | Nhắc nhở về rủi ro dữ liệu đầu vào chưa được kiểm chứng đầy đủ | Đưa ra kết luận Go quá dễ dãi mà không kèm điều kiện thử nghiệm an toàn | Đưa ra quyết định Go có điều kiện: chỉ thử nghiệm quy mô nhỏ bán thủ công trên tập dữ liệu sạch |
 
 > Nếu phase nào không dùng AI, ghi `Không dùng` và vì sao tự làm.
 
@@ -64,12 +64,8 @@ Chọn 3-4 câu trong 6 câu dưới để viết thành đoạn 8-12 câu (khô
 
 
 **Reflection:**
-Sau khi nghe qua top 3 solutions của các bạn khác, tôi có thấy được các lựa chọn của các bạn khác khá là chặt chẽ và kín, với những cái research khá là rõ ràng. Tôi có thay đổi 1  vài ý kiến sau khi bị Challenge. Tôi đã khá tập trung vào ai mà không nhận ra việc mình có thể thay đổi format của bản báo cáo, để PM có thể theo dõi báo cáo dễ hơn thay vì phải tự động viết ra báo cáo bằng ai. Điều khó nhất khi viết Problem Statement là khi mà mình không thực sự rõ rằng khách hàng sẽ chấp nhận việc sử dụng ai, và kể cả khi họ chấp nhận, họ có thực sự sẽ trả số tiền hao phí cho 1 chức năng như vậy không
-```text
 
-
-
-```
+Khi lắng nghe top 3 problems của các bạn khác, tôi nhận ra vấn đề tìm việc của sinh viên (Candidate #7) có tác động lớn hơn và tần suất gây ức chế cao hơn nhiều so với quy trình nội bộ của dev. Nhóm tôi ban đầu cũng có lúc bị cuốn vào tư duy solution-first, muốn dựng ngay một Agent tự động cào mọi website tuyển dụng và nộp CV tự động. Tuy nhiên, sau khi đối chiếu với rủi ro pháp lý từ chính sách cấm bot của LinkedIn, tôi và nhóm đã dừng lại để chọn mô hình Workflow bán tự động có con người kiểm soát. Bản thân tôi cũng thay đổi nhận thức sau khi bị nhóm challenge về tính khả thi của việc dùng AI tóm tắt code: tôi nhận ra chỉ cần chuẩn hóa lại template báo cáo cho PM là đã giảm được phần lớn thời gian mà không cần lạm dụng AI. Điều khó nhất khi viết Problem Statement chính là xác định Boundary (làm gì và không làm gì) để tránh phạm vi bị phình to. Ngoài ra, việc xác định metric đo lường chất lượng đề xuất của AI cũng rất thử thách vì tính phù hợp mang tính chủ quan của từng người tìm việc. Dấu tay rõ nhất của tôi là việc giữ vai trò Facilitator, kiên quyết bổ sung bước người dùng kiểm tra bắt buộc trước khi chốt danh sách việc làm rút gọn. Nếu được làm lại, tôi sẽ challenge nhóm quyết liệt hơn ở khâu validation. Tôi cũng sẽ yêu cầu phỏng vấn sâu người dùng thật thay vì chỉ dựa vào số liệu khảo sát mô phỏng.
 
 ---
 
@@ -84,4 +80,3 @@ Sau khi nghe qua top 3 solutions của các bạn khác, tôi có thấy đượ
 - [X] [10đ] Nhóm có Go / Not Yet / No-Go + lý do rõ
 - [X] [10đ] Reflection này có vai trò thật + AI giúp/sai ở đâu + điều học được + nếu làm lại đổi gì
 - [X] [6đ] Tôi tự giải thích được mạch problem → workflow → metric → boundary → độ phù hợp AI
-

@@ -19,15 +19,15 @@
 | 2 |Tốn thời gian |Viết báo cáo thủ công chi tiết về các lỗi đã sửa | Dev, PM|30 phút/lần |
 | 3 | Pain từ người khác |Truy tra lịch sử git/commit để tìm ra dev gây ra bug gốc |Dev |10 phút/lần |
 | 4 |Lặp lại |Tạo thủ công ticket mới trên Jira giao cho dev gây lỗi |Dev, Peer Dev |10 phút/lần |
-| 5 |Pain từ người khác |Tester phản hồi thông tin bug thiếu chi tiết, phải hỏi lại |Backend Dev, Tester |Tốn thêm thời gian trao đổi qua chat |
-| 6 |Tốn thời gian |Dev được tra là người gây ra bug có thể không thật sự tạo bug, mà do lỗi từ người khác |Peer Dev | Tốn thêm thời gian trao đổi|
-| 7 |AI có thể tốt hơn |Thiếu hệ thống tự động gợi ý đoạn code/nguyên nhân gây lỗi từ git log | Backend Dev|Phải đọc lại lịch sử commit thủ công |
+| 5 |Pain từ người khác |Tester phản hồi thông tin bug thiếu chi tiết, phải hỏi lại |Backend Dev, Tester |Mất thêm 15-20 phút chat qua lại/bug để làm rõ bước tái hiện |
+| 6 |Tốn thời gian |Dev được tra là người gây ra bug có thể không thật sự tạo bug, mà do lỗi từ người khác |Peer Dev | Mất 1-2 giờ trao đổi đối chất giữa các dev để xác định commit |
+| 7 |AI có thể tốt hơn |Thiếu hệ thống tự động gợi ý đoạn code/nguyên nhân gây lỗi từ git log | Backend Dev|Mất 15 phút đọc thủ công 10-20 commit diff gần nhất để tìm gốc rễ |
 | 8 |AI có thể tốt hơn |Tạo thủ công ticket báo cho tester đã sửa code | Backend Dev, Tester| 5-10 phút/lần |
 
 **AI đã dùng ở Phase 1 (nếu có):**
-- Prompt đã hỏi: Tôi có 1 context như sau: 1 người dev backend Mỗi ngày kiểm tra lỗi ở trên jira, sau khi sửa xong phải viết báo cáo về lỗi đã sửa, phải tra lại dev gây ra lỗi (nếu có), và tạo ticket cho người đó, đồng thời cũng phải tạo ticket để báo cho tester đã sửa code, cho tôi 10 problems bạn nhìn ra từ đây, có thể là những vấn đề ảnh hưởng đến tốc độ làm việc, mẫu như sau:*02-deliverable-example.md*
-- Ý dùng được:3,5
-- Ý bỏ vì không phải pain thật: Jira không tự động phân loại nguyên nhân gốc rễ của bug, vì đây không phải vấn đề liên quan đến loại bug
+- Prompt đã hỏi: Tôi là Backend Dev trong công ty 50 người, đã tự liệt kê được 3 vấn đề: (1) Mất 30p viết báo cáo fix lỗi cho PM, (2) Mất 10p tra git blame tìm dev gây lỗi, (3) Mất 10p tạo ticket báo tester. Hãy gợi ý thêm các problem khác theo 4 lăng kính (Lặp lại, Tốn thời gian, AI có thể tốt hơn, Pain từ người khác). Với mỗi gợi ý, ghi rõ actor, bước nghẽn và dấu hiệu đo lường cụ thể.
+- Ý dùng được: Vấn đề tester thiếu thông tin tái hiện (#5) và tranh cãi commit giữa các dev (#6).
+- Ý bỏ vì không phải pain thật: Jira không tự động phân loại nguyên nhân gốc rễ của bug, vì việc phân loại tự động này không giải quyết đúng nhu cầu vận hành thực tế.
 
 **Self-check Phase 1:**
 - [X] Đủ 5+ dòng, mỗi dòng có actor + số đo cụ thể
@@ -79,7 +79,7 @@ Non-AI alternative: Tạo template mẫu  để dev điền vào, script tự đ
 AI hypothesis: AI sẽ đóng vai trò cầu nối, phân tích code thay đổi và viết ra báo cáo gồm: Nguyên nhân, Cách sửa, Ảnh hưởng.
 
 Quick gut:
-Workflow
+[x] Workflow
 ```
 
 **Draft workflow Card #1** (ASCII / Mermaid / ảnh đính kèm):
@@ -124,10 +124,10 @@ Success metric:  Thời gian xử lý < 5 phút.
 
 Non-AI alternative: Dùng Git hooks hoặc CLI script để tự động lấy tên người commit cuối cùng và gọi API Jira tạo ticket.
 
-AI hypothesis: Một agent nhận file và line number gây lỗi, tự động gọi Git log/blame để lấy lịch sử 5 commit gần nhất, dùng AI đánh giá commit nào thực sự thay đổi logic kinh doanh dẫn tới lỗi, sau đó format sẵn payload API để tạo Jira ticket.
+AI hypothesis: Kết hợp script tự động lấy 5 commit diff gần nhất qua Git log/blame, dùng LLM tóm tắt thay đổi logic khả nghi, sau đó format sẵn nội dung Jira ticket để dev xác nhận trước khi gửi API.
 
 Quick gut:
-[x] Agent
+[x] Workflow
 ```
 
 **Draft workflow Card #2:**
@@ -139,9 +139,9 @@ CURRENT STATE — 20 phút
 
 FUTURE STATE — 4 phút
 
-[1 Chọn dòng lỗi & gọi Agent: 1'] → [2 Agent đọc Git history + đề xuất người chịu trách nhiệm & draft nội dung ticket: 1'] → [3 Dev review xác nhận: 2'] <-- human boundary → [4 Hệ thống tự tạo ticket: 0']
+[1 Chọn dòng lỗi & chạy tool: 0'] → [2 Script lấy Git diff + AI phân tích đề xuất commit nghi vấn & draft ticket: 1'] → [3 Dev review xác nhận: 2'] <-- human boundary → [4 Hệ thống tự tạo ticket qua API: 1']
 
-Fallback: AI không chắc chắn ai là người tạo bug -> Đẩy ticket về backlog chung hoặc dev tự đọc lại log thủ công.
+Fallback: AI không chắc chắn commit gây bug -> Giữ nguyên ticket ở backlog chung hoặc dev tự tra cứu log thủ công.
 ```
 
 
@@ -204,7 +204,7 @@ Viết báo cáo thủ công chi tiết về các lỗi đã sửa
 **Vì sao (2-3 câu: workflow gì, số đo gì, impact gì):**
 
 ```text
-Workflow tuyến tính, không đòi hỏi thay đổi quá nhiều. Số đo impact lớn nhất
+Workflow tuyến tính, đầu vào từ Git diff và Jira ticket rất rõ ràng. Đây là bài toán có impact lớn nhất: giảm từ 30 phút xuống 5 phút mỗi lần fix bug (tiết kiệm 25 phút/bug), trực tiếp giải phóng thời gian để dev tập trung code thay vì viết báo cáo.
 ```
 
 **Câu hỏi tôi muốn nhóm challenge (1-2 câu hỏi đúng chỗ yếu):**
